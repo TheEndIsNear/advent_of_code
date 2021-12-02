@@ -2006,7 +2006,7 @@ input =
   10406
   10415
   """
-  |> String.split("\r\n")
+  |> String.split("\n")
   |> Enum.reduce([], fn string, acc ->
     case Integer.parse(string) do
       {num, _} -> acc ++ [num]
@@ -2034,37 +2034,26 @@ end
 7 = Solution.solve(input2)
 
 Solution.solve(input)
-
-# Enum.count(input)
 ```
 
 ## Solution Day2 Part2
 
 ```elixir
 defmodule Solution2 do
-  def solve(list), do: solve(list, 0, 0)
+  def solve(list), do: solve(list, 0)
 
-  defp solve([num1, num2, num3 | rest], 0, acc) do
-    sum = num1 + num2 + num3
-    solve([num2, num3 | rest], sum, acc)
+  defp solve([num1, num2, num3, num4 | rest], acc) when num4 > num1 do
+    solve([num2, num3, num4 | rest], acc + 1)
   end
 
-  defp solve([num1, num2, num3 | rest], sum3, acc) do
-    sum = num1 + num2 + num3
+  defp solve([_num1, num2, num3 | rest], acc), do: solve([num2, num3 | rest], acc)
 
-    if sum > sum3 do
-      solve([num2, num3 | rest], sum, acc + 1)
-    else
-      solve([num2, num3 | rest], sum3, acc)
-    end
-  end
-
-  defp solve(_val, _, acc) do
+  defp solve(_val, acc) do
     acc
   end
 end
 
-# 5 = Solution2.solve(input2)
+5 = Solution2.solve(input2)
 
 Solution2.solve(input)
 ```
