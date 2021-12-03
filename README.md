@@ -1,2 +1,2 @@
 # advent_of_code
-Repo for working through Advent of Code puzzles
+Solutions for the [Advent of Code](https://adventofcode.com/) puzzles using [Elixir](https://elixir-lang.org/) [Livebook](https://livebook.dev/). 
