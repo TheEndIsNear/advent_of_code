@@ -1,0 +1,81 @@
+# Day2
+
+## Installs
+
+```elixir
+Mix.install([
+  {:kino, github: "livebook-dev/kino"}
+])
+```
+
+## Inputs
+
+```elixir
+input = Kino.Input.textarea("Past input file below:")
+```
+
+## Part1
+
+```elixir
+defmodule Solution do
+  def solve(input) do
+    {x, y} =
+      input
+      |> Kino.Input.read()
+      |> String.split("\n", trim: true)
+      |> Enum.reduce({0, 0}, fn input, {x, y} ->
+        [command, val] = String.split(input, " ")
+        val = String.to_integer(val)
+
+        case command do
+          "forward" ->
+            {x + val, y}
+
+          "down" ->
+            {x, y + val}
+
+          "up" ->
+            {x, y - val}
+        end
+      end)
+
+    x * y
+  end
+end
+
+Solution.solve(input)
+```
+
+## Part2
+
+```elixir
+defmodule Solution do
+  def solve(input) do
+    {x, y, _aim} =
+      input
+      |> Kino.Input.read()
+      |> String.split("\n", trim: true)
+      |> Enum.reduce({0, 0, 0}, fn input, {x, y, aim} ->
+        [command, val] = String.split(input, " ")
+        val = String.to_integer(val)
+
+        case command do
+          "forward" ->
+            {x + val, y + val * aim, aim}
+
+          "down" ->
+            {x, y, aim + val}
+
+          "up" ->
+            {x, y, aim - val}
+        end
+      end)
+
+    x * y
+  end
+end
+
+# input = ["forward 5", "down 5", "forward 8", "up 3", "down 8", "forward 2"]
+
+Solution.solve(input)
+```
