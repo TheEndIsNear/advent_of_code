@@ -1,0 +1,68 @@
+# Day3
+
+## Installs
+
+```elixir
+Mix.install([
+  {:kino, github: "livebook-dev/kino"}
+])
+```
+
+## Input Data
+
+```elixir
+input = Kino.Input.textarea("Past your input belwo:")
+```
+
+## Solution Day3 Part1
+
+```elixir
+defmodule Solution do
+  def solve(input) do
+    parsed_input =
+      input
+      |> Kino.Input.read()
+      |> String.split("\n", trim: true)
+
+    input_length = Enum.count(parsed_input) |> IO.inspect()
+
+    array =
+      parsed_input
+      |> Enum.map(&String.graphemes/1)
+      |> Enum.map(
+        &Enum.with_index(&1, fn element, index -> {index, String.to_integer(element)} end)
+      )
+      |> List.flatten()
+      |> Enum.reduce(initial_map(), fn {key, value}, acc ->
+        Map.update(acc, key, 0, &(&1 + value))
+      end)
+      |> IO.inspect()
+      |> Map.to_list()
+      |> Enum.map(fn {key, value} ->
+        {key, value > input_length / 2}
+      end)
+      |> IO.inspect()
+
+    num1 =
+      Enum.reduce(array, 0, fn {key, value}, acc ->
+        acc + convert(key, value)
+      end)
+
+    num2 =
+      Enum.reduce(array, 0, fn {key, value}, acc ->
+        acc + convert(key, not value)
+      end)
+
+    num1 * num2
+  end
+
+  defp initial_map do
+    for key <- 0..11, into: %{}, do: {key, 0}
+  end
+
+  defp convert(pos, true), do: 2 ** (11 - pos)
+  defp convert(_pos, false), do: 0
+end
+
+Solution.solve(input)
+```
