@@ -6,8 +6,8 @@ defmodule Day1 do
   @spec run(String.t()) :: [Elf.t()]
   def run(input_file \\ @input_file) do
     parse_file(input_file)
-    |> Enum.with_index()
-    |> Enum.map(fn {calories, index} ->
+    |> Stream.with_index()
+    |> Stream.map(fn {calories, index} ->
       Elf.new(%{calories: calories, total_calories: Enum.sum(calories), name: "Elf #{index}"})
     end)
     |> Enum.sort_by(& &1.total_calories, :desc)
@@ -20,8 +20,8 @@ defmodule Day1 do
 
   def top_three_elf_calories_combined(elves) do
     elves
-    |> Enum.take( 3)
-    |> Enum.map(& &1.total_calories)
+    |> Stream.take(3)
+    |> Stream.map(& &1.total_calories)
     |> Enum.sum()
   end
 
@@ -30,7 +30,7 @@ defmodule Day1 do
     input_file
     |> File.read!()
     |> String.split("\n")
-    |> Enum.chunk_while([], &chunk_fun/2, &after_fun/1)
+    |> Stream.chunk_while([], &chunk_fun/2, &after_fun/1)
   end
 
   defp chunk_fun("", acc) do
