@@ -13,6 +13,18 @@ defmodule Day1 do
     |> Enum.sort_by(& &1.total_calories, :desc)
   end
 
+  def top_elf_calories(elves) do
+    %Elf{total_calories: total_calories} = hd(elves)
+    total_calories
+  end
+
+  def top_three_elf_calories_combined(elves) do
+    elves
+    |> Enum.take( 3)
+    |> Enum.map(& &1.total_calories)
+    |> Enum.sum()
+  end
+
   @spec parse_file(String.t()) :: [integer()]
   def parse_file(input_file) do
     input_file
