@@ -8,13 +8,25 @@ defmodule Day2 do
   @spec run(String.t()) :: integer()
   def run(input_file \\ @input_file) do
     input_file
+    |> parse_input()
+    |> Stream.map(fn [a, b] -> {convert_to_rps(a), convert_to_rps(b)} end)
+    |> Enum.reduce(0, &(calculate_score(&1) + &2))
+  end
+
+  def run2(input_file \\ @input_file) do
+    input_file
+    |> parse_input()
+    |> Stream.map(fn [a, b] -> {convert_to_rps(a), calculate_play(a, b)} end)
+    |> Enum.reduce(0, &(calculate_score(&1) + &2))
+  end
+
+  defp parse_input(input_file) do
+    input_file
     |> File.read!()
     |> String.split("\n")
-    |> Enum.map(fn item ->
-      [a, b] = String.split(item, " ")
-      {convert_to_rps(a), convert_to_rps(b)}
+    |> Stream.map(fn item ->
+       String.split(item, " ")
     end)
-    |> Enum.reduce(0, &(calculate_score(&1) + &2))
   end
 
   defp convert_to_rps("A"), do: :rock
@@ -23,6 +35,17 @@ defmodule Day2 do
   defp convert_to_rps("X"), do: :rock
   defp convert_to_rps("Y"), do: :paper
   defp convert_to_rps("Z"), do: :scissors
+
+  defp calculate_play("A", "X"), do: :scissors
+  defp calculate_play("B", "X"), do: :rock
+  defp calculate_play("C", "X"), do: :paper
+  defp calculate_play("A", "Y"), do: :rock
+  defp calculate_play("B", "Y"), do: :paper
+  defp calculate_play("C", "Y"), do: :scissors
+  defp calculate_play("A", "Z"), do: :paper
+  defp calculate_play("B", "Z"), do: :scissors
+  defp calculate_play("C", "Z"), do: :rock
+
 
   defp calculate_score({_, b} = round) do
     score_for_choice(b) + score_for_winning(round)
