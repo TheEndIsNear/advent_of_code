@@ -1,0 +1,60 @@
+# Day 1
+
+## Installs
+
+```elixir
+Mix.install([
+  {:kino, github: "livebook-dev/kino"}
+])
+```
+
+## Input Data
+
+```elixir
+input = Kino.Input.textarea("Paste your input below:")
+```
+
+## Solution Day1 Part1
+
+```elixir
+defmodule Solution do
+  def solve(list), do: solve(list, 0)
+
+  defp solve([num1, num2 | rest], acc) when num2 > num1 do
+    solve([num2 | rest], acc + 1)
+  end
+
+  defp solve([_num1, num2 | rest], acc), do: solve([num2 | rest], acc)
+  defp solve(_, acc), do: acc
+end
+
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+|> Enum.map(&String.to_integer/1)
+|> Solution.solve()
+```
+
+## Solution Day2 Part2
+
+```elixir
+defmodule Solution2 do
+  def solve(list), do: solve(list, 0)
+
+  defp solve([num1, num2, num3, num4 | rest], acc) when num4 > num1 do
+    solve([num2, num3, num4 | rest], acc + 1)
+  end
+
+  defp solve([_num1, num2, num3 | rest], acc), do: solve([num2, num3 | rest], acc)
+
+  defp solve(_val, acc) do
+    acc
+  end
+end
+
+input
+|> Kino.Input.read()
+|> String.split("\n", trim: true)
+|> Enum.map(&String.to_integer/1)
+|> Solution2.solve()
+```
